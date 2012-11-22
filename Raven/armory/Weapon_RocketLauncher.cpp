@@ -109,6 +109,7 @@ void RocketLauncher::InitializeFuzzyModule()
   FzSet& Ammo_Low = AmmoStatus.AddTriangularSet("Ammo_Low", 0, 10, 20);
   FzSet& Ammo_VeryLow = AmmoStatus.AddTriangularSet("Ammo_VeryLow", 0, 0, 10);
 
+  //Définition des nouvelles règles
   m_FuzzyModule.AddRule(FzAND(Target_VeryClose, Ammo_Overloads), VeryUndesirable);
   m_FuzzyModule.AddRule(FzAND(Target_VeryClose, Ammo_Loads), VeryUndesirable);
   m_FuzzyModule.AddRule(FzAND(Target_VeryClose, Ammo_Okay), VeryUndesirable);
@@ -138,9 +139,6 @@ void RocketLauncher::InitializeFuzzyModule()
   m_FuzzyModule.AddRule(FzAND(Target_FarFarAway, Ammo_Okay), VeryUndesirable);
   m_FuzzyModule.AddRule(FzAND(Target_FarFarAway, Ammo_Low), VeryUndesirable);
   m_FuzzyModule.AddRule(FzAND(Target_FarFarAway, Ammo_VeryLow), VeryUndesirable);
-
-  //Définition des règles pour la proximité, la vie de l'ennemi et les munitions du bot
-
 
 }
 
