@@ -11,7 +11,6 @@
 #include "2D/transformations.h"
 
 
-
 //------------------------- ctor ----------------------------------------------
 //-----------------------------------------------------------------------------
 Raven_WeaponSystem::Raven_WeaponSystem(Raven_Bot* owner,
@@ -243,7 +242,7 @@ double Raven_WeaponSystem::GetPrecision(double DistToTarget, double Velocity, do
   }
   else
   {
-    //fuzzify distance and amount of ammo
+    //fuzzify distance velocity and time visible
     m_FuzzyModule.Fuzzify("DistToTarget", DistToTarget);
     m_FuzzyModule.Fuzzify("Velocity", Velocity);
 	m_FuzzyModule.Fuzzify("TimeVisible", TimeVisible);
@@ -259,7 +258,7 @@ double Raven_WeaponSystem::GetPrecision(double DistToTarget, double Velocity, do
 //  this method aims the bots current weapon at the target (if there is a
 //  target) and, if aimed correctly, fires a round
 //-----------------------------------------------------------------------------
-void Raven_WeaponSystem::TakeAimAndShoot()const
+void Raven_WeaponSystem::TakeAimAndShoot()
 {
   //aim the weapon only if the current target is shootable or if it has only
   //very recently gone out of view (this latter condition is to ensure the 
@@ -270,7 +269,26 @@ void Raven_WeaponSystem::TakeAimAndShoot()const
        m_dAimPersistance) )
   {
     //the position the weapon will be aimed at
-    Vector2D AimingPos = m_pOwner->GetTargetBot()->Pos();
+	  int random = rand() % 100;
+	int direction = 1;
+	int theta = 45;
+	
+	if(random <= 50)
+	{
+		direction = -1;
+	}
+
+	double precision = GetPrecision(Vec2DDistance(m_pOwner->Pos(), m_pOwner->GetTargetSys()->GetTarget()->Pos()), m_pOwner->GetTargetSys()->GetTarget()->Velocity().Length(), m_pOwner->GetTargetSys()->GetTimeTargetHasBeenVisible());
+	double x = m_pOwner->GetTargetSys()->GetTarget()->Pos().x;
+	double y = m_pOwner->GetTargetSys()->GetTarget()->Pos().y;
+
+	double x_origin = m_pOwner->Pos().x;
+	double y_origin = m_pOwner->Pos().y;
+	theta = theta * (1 - precision) * direction;
+	double px = ((x - x_origin) * cosf(theta)) - ((y_origin - y) * sinf(theta));
+	double py = ((y_origin - y) * cosf(theta)) - ((x - x_origin) * sinf(theta));
+	Vector2D AimingPos = Vector2D(px, py);
+	//Vector2D AimingPos = m_pOwner->GetTargetBot()->Pos();
     
     //if the current weapon is not an instant hit type gun the target position
     //must be adjusted to take into account the predicted movement of the 
