@@ -64,10 +64,14 @@ private:
 
   void InitializeFuzzyModule();
 
+  double GetPrecision(double DistToTarget, double Velocity, double TimeVisible);
+
   //fuzzy logic is used to determine the desirability of a weapon. Each weapon
   //owns its own instance of a fuzzy module because each has a different rule 
   //set for inferring desirability.
   FuzzyModule   m_FuzzyModule;
+
+  double LastPrecisionScore;
 
 public:
 
