@@ -13,6 +13,7 @@
 //-----------------------------------------------------------------------------
 #include <map>
 #include "2d/vector2d.h"
+#include "fuzzy\FuzzyModule.h"
 
 class Raven_Bot;
 class Raven_Weapon;
