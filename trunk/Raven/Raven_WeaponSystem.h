@@ -63,6 +63,11 @@ private:
 
   void InitializeFuzzyModule();
 
+  //fuzzy logic is used to determine the desirability of a weapon. Each weapon
+  //owns its own instance of a fuzzy module because each has a different rule 
+  //set for inferring desirability.
+  FuzzyModule   m_FuzzyModule;
+
 public:
 
   Raven_WeaponSystem(Raven_Bot* owner,
