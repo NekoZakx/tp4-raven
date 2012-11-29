@@ -232,6 +232,28 @@ void Raven_WeaponSystem::InitializeFuzzyModule()
 
 }
 
+//---------------------------- Precision -----------------------------------
+//
+//-----------------------------------------------------------------------------
+double Raven_WeaponSystem::GetPrecision(double DistToTarget, double Velocity, double TimeVisible)
+{
+  if (GetCurrentWeapon()->NumRoundsRemaining() == 0)
+  {
+    LastPrecisionScore = 0;
+  }
+  else
+  {
+    //fuzzify distance and amount of ammo
+    m_FuzzyModule.Fuzzify("DistToTarget", DistToTarget);
+    m_FuzzyModule.Fuzzify("Velocity", Velocity);
+	m_FuzzyModule.Fuzzify("TimeVisible", TimeVisible);
+
+    LastPrecisionScore = m_FuzzyModule.DeFuzzify("Precision", FuzzyModule::max_av);
+  }
+
+  return LastPrecisionScore;
+}
+
 //--------------------------- TakeAimAndShoot ---------------------------------
 //
 //  this method aims the bots current weapon at the target (if there is a
