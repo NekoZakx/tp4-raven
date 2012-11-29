@@ -168,6 +168,12 @@ void Raven_WeaponSystem::ChangeWeapon(unsigned int type)
   if (w) m_pCurrentWeapon = w;
 }
 
+//Initialisation des variables pour le FuzzyModule
+void Raven_WeaponSystem::InitializeFuzzyModule()
+{
+
+}
+
 //--------------------------- TakeAimAndShoot ---------------------------------
 //
 //  this method aims the bots current weapon at the target (if there is a
