@@ -61,6 +61,8 @@ private:
   //rads
   void        AddNoiseToAim(Vector2D& AimingPos)const;
 
+  void InitializeFuzzyModule();
+
 public:
 
   Raven_WeaponSystem(Raven_Bot* owner,
