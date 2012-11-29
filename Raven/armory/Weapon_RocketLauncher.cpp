@@ -89,7 +89,7 @@ void RocketLauncher::InitializeFuzzyModule()
 {
   FuzzyVariable& DistToTarget = m_FuzzyModule.CreateFLV("DistToTarget");
 
-  FzSet& Target_VeryClose = DistToTarget.AddTriangularSet("Target_VeryClose",0,0,75);
+  FzSet& Target_VeryClose = DistToTarget.AddLeftShoulderSet("Target_VeryClose",0,0,75);
   FzSet& Target_Close = DistToTarget.AddTriangularSet("Target_Close",0,75,150);
   FzSet& Target_Medium = DistToTarget.AddTriangularSet("Target_Medium",25,150,300);
   FzSet& Target_Far = DistToTarget.AddTriangularSet("Target_Far",150,300,450);
