@@ -9,6 +9,9 @@
 #include "Raven_Game.h"
 #include "Raven_UserOptions.h"
 #include "2D/transformations.h"
+#include <cstring>
+#include <string.h>
+#include <cstringt.h>
 
 
 //------------------------- ctor ----------------------------------------------
@@ -56,6 +59,8 @@ void Raven_WeaponSystem::Initialize()
   m_WeaponMap[type_shotgun]         = 0;
   m_WeaponMap[type_rail_gun]        = 0;
   m_WeaponMap[type_rocket_launcher] = 0;
+
+  InitializeFuzzyModule();
 }
 
 //-------------------------------- SelectWeapon -------------------------------
@@ -171,9 +176,9 @@ void Raven_WeaponSystem::ChangeWeapon(unsigned int type)
 void Raven_WeaponSystem::InitializeFuzzyModule()
 {
 	FuzzyVariable& DistToTarget = m_FuzzyModule.CreateFLV("DistToTarget");
-	FzSet& Target_Close = DistToTarget.AddLeftShoulderSet("Target_Close",0,75,150);
-	FzSet& Target_Medium = DistToTarget.AddTriangularSet("Target_Medium",25,150,300);
-	FzSet& Target_Far = DistToTarget.AddRightShoulderSet("Target_Far",150,300,450);
+	FzSet& Target_Close = DistToTarget.AddLeftShoulderSet("Target_Close",0,30,60);
+	FzSet& Target_Medium = DistToTarget.AddTriangularSet("Target_Medium",30,60,150);
+	FzSet& Target_Far = DistToTarget.AddRightShoulderSet("Target_Far",60,150,1000);
 
 	FuzzyVariable& Precision = m_FuzzyModule.CreateFLV("Precision");
 	FzSet& VeryLowPrecision = Precision.AddLeftShoulderSet("VeryLowPrecision", 0, 0, 0.2);
@@ -183,14 +188,14 @@ void Raven_WeaponSystem::InitializeFuzzyModule()
 	FzSet& VeryHighPrecision = Precision.AddRightShoulderSet("VeryHighPrecision", 0.6, 0.8, 1);
 
 	FuzzyVariable& Velocity = m_FuzzyModule.CreateFLV("Velocity");
-	FzSet& LowVelocity = Velocity.AddLeftShoulderSet("LowVelocity", 0, 0, 0.33);
-	FzSet& MediumVelocity = Velocity.AddTriangularSet("MediumVelocity", 0, 0.33, 0.66);
-	FzSet& HighVelocity = Velocity.AddRightShoulderSet("HighVelocity", 0.33, 0.66, 1);
+	FzSet& LowVelocity = Velocity.AddLeftShoulderSet("LowVelocity", 0, 0, 0.70);
+	FzSet& MediumVelocity = Velocity.AddTriangularSet("MediumVelocity", 0, 0.70, 0.90);
+	FzSet& HighVelocity = Velocity.AddRightShoulderSet("HighVelocity", 0.70, 0.90, 2);
 
 	FuzzyVariable& TimeVisible = m_FuzzyModule.CreateFLV("TimeVisible");
-	FzSet& LowTimeVisible = TimeVisible.AddLeftShoulderSet("LowTimeVisible", 0, 0, 10);
-	FzSet& MediumTimeVisible = TimeVisible.AddTriangularSet("MediumTimeVisible", 0, 10, 20);
-	FzSet& HighTimeVisible = TimeVisible.AddRightShoulderSet("HighTimeVisible", 10, 20, 30);
+	FzSet& LowTimeVisible = TimeVisible.AddLeftShoulderSet("LowTimeVisible", 0, 0, 2);
+	FzSet& MediumTimeVisible = TimeVisible.AddTriangularSet("MediumTimeVisible", 0, 2, 5);
+	FzSet& HighTimeVisible = TimeVisible.AddRightShoulderSet("HighTimeVisible", 2, 5, 100);
 
 	//Définition des règles
 	m_FuzzyModule.AddRule(FzAND(Target_Close, LowTimeVisible, LowVelocity), VeryHighPrecision);
@@ -236,22 +241,27 @@ void Raven_WeaponSystem::InitializeFuzzyModule()
 //-----------------------------------------------------------------------------
 double Raven_WeaponSystem::GetPrecision(double DistToTarget, double Velocity, double TimeVisible)
 {
-  if (GetCurrentWeapon()->NumRoundsRemaining() == 0)
-  {
-    LastPrecisionScore = 0;
-  }
-  else
-  {
+	TCHAR   szBuffer[32]; 
+	sprintf( szBuffer, "%f", DistToTarget );
+	OutputDebugString ("DistToTarget: ");
+	OutputDebugString (szBuffer);
+
+	sprintf( szBuffer, "%f", Velocity );
+	OutputDebugString (" === Velocity: ");
+	OutputDebugString (szBuffer);
+
+	sprintf( szBuffer, "%f", TimeVisible );
+	OutputDebugString (" === TimeVisible: ");
+	OutputDebugString (szBuffer);
+
     //fuzzify distance velocity and time visible
     m_FuzzyModule.Fuzzify("DistToTarget", DistToTarget);
     m_FuzzyModule.Fuzzify("Velocity", Velocity);
 	m_FuzzyModule.Fuzzify("TimeVisible", TimeVisible);
 
-    LastPrecisionScore = m_FuzzyModule.DeFuzzify("Precision", FuzzyModule::max_av);
-  }
-
-  return LastPrecisionScore;
+    return m_FuzzyModule.DeFuzzify("Precision", FuzzyModule::max_av);
 }
+
 
 //--------------------------- TakeAimAndShoot ---------------------------------
 //
@@ -271,7 +281,7 @@ void Raven_WeaponSystem::TakeAimAndShoot()
     //the position the weapon will be aimed at
 	  int random = rand() % 100;
 	int direction = 1;
-	int theta = 45;
+	double theta = 0.2; //Tweak the angle of a shot, the angle will be more revelant if far of target
 	
 	if(random <= 50)
 	{
@@ -279,14 +289,57 @@ void Raven_WeaponSystem::TakeAimAndShoot()
 	}
 
 	double precision = GetPrecision(Vec2DDistance(m_pOwner->Pos(), m_pOwner->GetTargetSys()->GetTarget()->Pos()), m_pOwner->GetTargetSys()->GetTarget()->Velocity().Length(), m_pOwner->GetTargetSys()->GetTimeTargetHasBeenVisible());
-	double x = m_pOwner->GetTargetSys()->GetTarget()->Pos().x;
-	double y = m_pOwner->GetTargetSys()->GetTarget()->Pos().y;
+	
+	TCHAR   szBuffer[32]; 
+	sprintf( szBuffer, "%f", (1- precision ));
+	OutputDebugString (" === PRECISION: ");
+	OutputDebugString (szBuffer);
 
-	double x_origin = m_pOwner->Pos().x;
-	double y_origin = m_pOwner->Pos().y;
+	OutputDebugString ("\n");
+
 	theta = theta * (1 - precision) * direction;
-	double px = ((x - x_origin) * cosf(theta)) - ((y_origin - y) * sinf(theta));
-	double py = ((y_origin - y) * cosf(theta)) - ((x - x_origin) * sinf(theta));
+	
+	double s = sin(theta);
+	double c = cos(theta);
+
+	double x = m_pOwner->GetTargetBot()->Pos().x;
+	double y = m_pOwner->GetTargetBot()->Pos().y;
+
+	double x_origin = x - m_pOwner->Pos().x;
+	double y_origin = y - m_pOwner->Pos().y;
+
+	double px = x_origin * c - y_origin * s;
+	double py = x_origin * s + y_origin * c;
+
+	px = px + m_pOwner->Pos().x;
+	py = py + m_pOwner->Pos().y;
+	
+	/*TCHAR   szBuffer[32]; 
+	sprintf( szBuffer, "%f", theta );
+	OutputDebugString ("\n------------------------------------------\nTHETA: ");
+	OutputDebugString (szBuffer);
+
+	OutputDebugString ("\n");
+	
+	sprintf( szBuffer, "%f", m_pOwner->GetTargetBot()->Pos().x );
+	OutputDebugString ("NOR_AIM_X: ");
+	OutputDebugString (szBuffer);
+
+	sprintf( szBuffer, "%f", m_pOwner->GetTargetBot()->Pos().y );
+	OutputDebugString (" NOR_AIM_Y: ");
+	OutputDebugString (szBuffer);
+	
+	OutputDebugString ("\n");
+
+	sprintf( szBuffer, "%f", px );
+	OutputDebugString ("NEW_AIM_X: ");
+	OutputDebugString (szBuffer);
+
+	sprintf( szBuffer, "%f", py );
+	OutputDebugString (" NEW_AIM_Y: ");
+	OutputDebugString (szBuffer);*/
+
+
 	Vector2D AimingPos = Vector2D(px, py);
 	//Vector2D AimingPos = m_pOwner->GetTargetBot()->Pos();
     

@@ -71,8 +71,6 @@ private:
   //set for inferring desirability.
   FuzzyModule   m_FuzzyModule;
 
-  double LastPrecisionScore;
-
 public:
 
   Raven_WeaponSystem(Raven_Bot* owner,
