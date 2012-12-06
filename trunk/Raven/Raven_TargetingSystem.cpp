@@ -28,16 +28,15 @@ void Raven_TargetingSystem::Update()
   for (curBot; curBot != SensedBots.end(); ++curBot)
   {
     //make sure the bot is alive and that it is not the owner
-	TCHAR   szBuffer[32]; 
+	/*TCHAR   szBuffer[32]; 
 	//sprintf( szBuffer, "%f", m_pOwner->GetTeam()->GetName().c_str() );
 	OutputDebugString ("m_pOwner Team: ");
 	OutputDebugString ( (LPCSTR)m_pOwner->GetTeam()->GetName().c_str());
-	OutputDebugString (szBuffer);
 
 	//sprintf( szBuffer, "%f", (*curBot)->GetTeam()->GetName().c_str() );
 	OutputDebugString (" --- currentB Team: ");
 	OutputDebugString ( (LPCSTR)(*curBot)->GetTeam()->GetName().c_str());
-	OutputDebugString (szBuffer);
+	OutputDebugString ("\n");*/
 
 
 	  if ((*curBot)->isAlive() && (*curBot != m_pOwner) && ((*curBot)->GetTeam() != m_pOwner->GetTeam()))
