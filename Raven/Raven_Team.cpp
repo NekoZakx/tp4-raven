@@ -13,6 +13,7 @@ Raven_Team::~Raven_Team() {
 
 //Add bot to the team
 void Raven_Team::AddBot( Raven_Bot* bot) {
+	bot->SetTeam(this);
 	teamMember.push_back(bot);
 }
 
