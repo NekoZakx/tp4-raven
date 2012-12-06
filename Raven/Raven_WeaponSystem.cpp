@@ -241,7 +241,7 @@ void Raven_WeaponSystem::InitializeFuzzyModule()
 //-----------------------------------------------------------------------------
 double Raven_WeaponSystem::GetPrecision(double DistToTarget, double Velocity, double TimeVisible)
 {
-	TCHAR   szBuffer[32]; 
+	/*TCHAR   szBuffer[32]; 
 	sprintf( szBuffer, "%f", DistToTarget );
 	OutputDebugString ("DistToTarget: ");
 	OutputDebugString (szBuffer);
@@ -252,7 +252,7 @@ double Raven_WeaponSystem::GetPrecision(double DistToTarget, double Velocity, do
 
 	sprintf( szBuffer, "%f", TimeVisible );
 	OutputDebugString (" === TimeVisible: ");
-	OutputDebugString (szBuffer);
+	OutputDebugString (szBuffer);*/
 
     //fuzzify distance velocity and time visible
     m_FuzzyModule.Fuzzify("DistToTarget", DistToTarget);
@@ -290,12 +290,12 @@ void Raven_WeaponSystem::TakeAimAndShoot()
 
 	double precision = GetPrecision(Vec2DDistance(m_pOwner->Pos(), m_pOwner->GetTargetSys()->GetTarget()->Pos()), m_pOwner->GetTargetSys()->GetTarget()->Velocity().Length(), m_pOwner->GetTargetSys()->GetTimeTargetHasBeenVisible());
 	
-	TCHAR   szBuffer[32]; 
+	/*TCHAR   szBuffer[32]; 
 	sprintf( szBuffer, "%f", (1- precision ));
 	OutputDebugString (" === PRECISION: ");
 	OutputDebugString (szBuffer);
 
-	OutputDebugString ("\n");
+	OutputDebugString ("\n");*/
 
 	theta = theta * (1 - precision) * direction;
 	
