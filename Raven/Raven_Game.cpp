@@ -43,6 +43,9 @@ Raven_Game::Raven_Game():m_pSelectedBot(NULL),
 {
   //load in the default map
   LoadMap(script->GetString("StartMap"));
+
+  ravenTeam.push_back(Raven_Team("Blue"));
+  ravenTeam.push_back(Raven_Team("Red"));
 }
 
 
@@ -184,6 +187,9 @@ void Raven_Game::Update()
     if (!m_Bots.empty())
     {
       Raven_Bot* pBot = m_Bots.back();
+	  for(int i = 0; i < ravenTeam.size(); i++) {
+		  ravenTeam[i].RemoveBot(pBot);
+	  }
       if (pBot == m_pSelectedBot)m_pSelectedBot=0;
       NotifyAllBotsOfRemoval(pBot);
       delete m_Bots.back();
@@ -261,6 +267,14 @@ void Raven_Game::AddBots(unsigned int NumBotsToAdd)
     //register the bot with the entity manager
     EntityMgr->RegisterEntity(rb);
 
+	//Add bot to their team
+	for(int i = 1; i <= ravenTeam.size() ; i++) {
+		if(ravenTeam[i].GetTeamSize() < ravenTeam[i - 1].GetTeamSize())
+			ravenTeam[i].AddBot(rb);
+		else
+			if(i == ravenTeam.size())
+				ravenTeam[0].AddBot(rb);
+	}
     
 #ifdef LOG_CREATIONAL_STUFF
   debug_con << "Adding bot with ID " << ttos(rb->ID()) << "";
