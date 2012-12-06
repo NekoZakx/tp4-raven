@@ -42,3 +42,8 @@ bool Raven_Team::IsInTeam( Raven_Bot* bot) {
 int Raven_Team::GetTeamSize(){
 	return teamMember.size();
 }
+
+//Get the name of the team
+std::string Raven_Team::GetName(){
+	return team_name;
+}
