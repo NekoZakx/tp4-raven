@@ -28,6 +28,16 @@ void Raven_TargetingSystem::Update()
   for (curBot; curBot != SensedBots.end(); ++curBot)
   {
     //make sure the bot is alive and that it is not the owner
+	TCHAR   szBuffer[32]; 
+	sprintf( szBuffer, "%f", m_pOwner->GetTeam()->GetName() );
+	OutputDebugString ("m_pOwner Team: ");
+	OutputDebugString (szBuffer);
+
+	sprintf( szBuffer, "%f", (*curBot)->GetTeam()->GetName() );
+	OutputDebugString (" --- currentB Team: ");
+	OutputDebugString (szBuffer);
+
+
 	  if ((*curBot)->isAlive() && (*curBot != m_pOwner) && ((*curBot)->GetTeam() != m_pOwner->GetTeam()))
     {
       double dist = Vec2DDistanceSq((*curBot)->Pos(), m_pOwner->Pos());
