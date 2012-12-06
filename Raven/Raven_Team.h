@@ -20,6 +20,8 @@ class Raven_Team
 		void RemoveBot(Raven_Bot*);
 
 		bool IsInTeam(Raven_Bot*);
+
+		int GetTeamSize();
 };
 
 #endif
