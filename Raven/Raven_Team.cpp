@@ -36,3 +36,8 @@ bool Raven_Team::IsInTeam( Raven_Bot* bot) {
 	}	
 	return false;
 }
+
+//Get team size
+int Raven_Team::GetTeamSize(){
+	return teamMember.size();
+}
