@@ -8,11 +8,11 @@
 class Raven_Team
 {
 	private:
-		string team_name;
-		vector<Raven_Bot*> teamMember;
+		std::string team_name;
+		std::vector<Raven_Bot*> teamMember;
 
 	public:
-		Raven_Team(string name);
+		Raven_Team(std::string name);
 		~Raven_Team();
 
 		void AddBot(Raven_Bot*);
