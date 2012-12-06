@@ -31,7 +31,6 @@
 //uncomment to write object creation/deletion to debug console
 //#define  LOG_CREATIONAL_STUFF
 
-
 //----------------------------- ctor ------------------------------------------
 //-----------------------------------------------------------------------------
 Raven_Game::Raven_Game():m_pSelectedBot(NULL),
@@ -41,11 +40,10 @@ Raven_Game::Raven_Game():m_pSelectedBot(NULL),
                          m_pPathManager(NULL),
                          m_pGraveMarkers(NULL)
 {
+	ravenTeam.push_back(Raven_Team("Blue"));
+	ravenTeam.push_back(Raven_Team("Red"));
   //load in the default map
   LoadMap(script->GetString("StartMap"));
-
-  ravenTeam.push_back(Raven_Team("Blue"));
-  ravenTeam.push_back(Raven_Team("Red"));
 }
 
 
@@ -268,11 +266,11 @@ void Raven_Game::AddBots(unsigned int NumBotsToAdd)
     EntityMgr->RegisterEntity(rb);
 
 	//Add bot to their team
-	for(int i = 1; i <= ravenTeam.size() ; i++) {
-		if(ravenTeam[i].GetTeamSize() < ravenTeam[i - 1].GetTeamSize())
+	for(int i = 0; i < ravenTeam.size() ; i++) {
+		if(ravenTeam[i].GetTeamSize() < ravenTeam[0].GetTeamSize())
 			ravenTeam[i].AddBot(rb);
 		else
-			if(i == ravenTeam.size())
+			if(i == ravenTeam.size() - 1)
 				ravenTeam[0].AddBot(rb);
 	}
     

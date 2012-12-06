@@ -29,12 +29,14 @@ void Raven_TargetingSystem::Update()
   {
     //make sure the bot is alive and that it is not the owner
 	TCHAR   szBuffer[32]; 
-	sprintf( szBuffer, "%f", m_pOwner->GetTeam()->GetName() );
+	//sprintf( szBuffer, "%f", m_pOwner->GetTeam()->GetName().c_str() );
 	OutputDebugString ("m_pOwner Team: ");
+	OutputDebugString ( (LPCSTR)m_pOwner->GetTeam()->GetName().c_str());
 	OutputDebugString (szBuffer);
 
-	sprintf( szBuffer, "%f", (*curBot)->GetTeam()->GetName() );
+	//sprintf( szBuffer, "%f", (*curBot)->GetTeam()->GetName().c_str() );
 	OutputDebugString (" --- currentB Team: ");
+	OutputDebugString ( (LPCSTR)(*curBot)->GetTeam()->GetName().c_str());
 	OutputDebugString (szBuffer);
 
 

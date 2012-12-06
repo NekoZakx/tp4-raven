@@ -28,22 +28,6 @@ public:
   }
 };
 
-//-------------------------------
-//Calcul l'heuristic de Manhattan
-//-------------------------------
-class Heuristic_Manhattan 
-{
-public:
-
-  Heuristic_Manhattan(){}
-
-  template <class graph_type>
-  static double Calculate(const graph_type& G, int nd1, int nd2)
-  {
-    return abs(G.GetNode(nd2).Pos().x - G.GetNode(nd1).Pos().x) + abs(G.GetNode(nd2).Pos().y - G.GetNode(nd1).Pos().y);
-  }
-};
-
 //-----------------------------------------------------------------------------
 //this uses the euclidian distance but adds in an amount of noise to the 
 //result. You can use this heuristic to provide imperfect paths. This can
