@@ -16,7 +16,7 @@
 #include "game/MovingEntity.h"
 #include "misc/utils.h"
 #include "Raven_TargetingSystem.h"
-#include "Raven_Team.h"
+#include "./Raven_Team.h"
 
 
 class Raven_PathPlanner;
@@ -42,7 +42,7 @@ private:
 private:
 
   //My current team, don't shoot them.
-  Raven_Team						 team;
+  Raven_Team*						 team;
 
   //alive, dead or spawning?
   Status                             m_Status;
@@ -166,8 +166,8 @@ public:
   void          SetAlive(){m_Status = alive;}
 
   //Get Set Team
-  void			SetTeam(Raven_Team newTeam){ team = newTeam; }
-  Raven_Team	GetTeam(){ return team; }
+  void			SetTeam(Raven_Team* newTeam){ team = newTeam; }
+  Raven_Team*	GetTeam(){ return team; }
 
   //returns a value indicating the time in seconds it will take the bot
   //to reach the given position at its current speed.
