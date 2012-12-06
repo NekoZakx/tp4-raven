@@ -24,8 +24,6 @@
 #include "graph/SparseGraph.h"
 #include "misc/PriorityQueue.h"
 
-//détermine le coût total à ne pas dépasser
-#define maxCost 8.0
 
 //----------------------------- Graph_SearchDFS -------------------------------
 //
@@ -580,16 +578,7 @@ public:
   std::list<int> GetPathToTarget()const;
 
   //returns the total cost to the target
-  double GetCostToTarget()const{
-	  if(m_GCosts[m_iTarget] <= maxCost)
-	  {
-		  return m_GCosts[m_iTarget];
-	  }
-	  else
-	  {
-		  return 0;
-	  }
-  }
+  double GetCostToTarget()const{return m_GCosts[m_iTarget];}
 };
 
 //-----------------------------------------------------------------------------
@@ -635,16 +624,9 @@ void Graph_SearchAStar<graph_type, heuristic>::Search()
         m_FCosts[pE->To()] = GCost + HCost;
         m_GCosts[pE->To()] = GCost;
 
-		if(GCost <= maxCost)
-		{
-			pq.insert(pE->To());
+        pq.insert(pE->To());
 
-			m_SearchFrontier[pE->To()] = pE;
-		}
-		else
-		{
-			return;
-		}
+        m_SearchFrontier[pE->To()] = pE;
       }
 
       //if this node is already on the frontier but the cost to get here
@@ -655,16 +637,9 @@ void Graph_SearchAStar<graph_type, heuristic>::Search()
         m_FCosts[pE->To()] = GCost + HCost;
         m_GCosts[pE->To()] = GCost;
 
-		if(GCost <= maxCost)
-		{
-			pq.ChangePriority(pE->To());
+        pq.ChangePriority(pE->To());
 
-			m_SearchFrontier[pE->To()] = pE;
-		}
-		else
-		{
-			return;
-		}
+        m_SearchFrontier[pE->To()] = pE;
       }
     }
   }

@@ -32,13 +32,6 @@ bool ValidNeighbour(int x, int y, int NumCellsX, int NumCellsY)
 {
   return !((x < 0) || (x >= NumCellsX) || (y < 0) || (y >= NumCellsY));
 }
-
-
-double functionRandD(double fMin, double fMax)
-{
-    double f = (double)rand() / RAND_MAX;
-    return fMin + f * (fMax - fMin);
-}
   
 //------------ GraphHelper_AddAllNeighboursToGridNode ------------------
 //
@@ -46,13 +39,13 @@ double functionRandD(double fMin, double fMax)
 //  is positioned in a grid layout
 //------------------------------------------------------------------------
 template <class graph_type>
-void GraphHelper_AddAllNeighboursToGridNode(graph_type& graph, int index, int dest, double cost)
-{ 
-	double distCost = cost;
-	graph_type::EdgeType NewEdge(index, dest, distCost);
-	graph.AddEdge(NewEdge);
-
-  /*for (int i=-1; i<2; ++i)
+void GraphHelper_AddAllNeighboursToGridNode(graph_type& graph,
+                                            int         row,
+                                            int         col,
+                                            int         NumCellsX,
+                                            int         NumCellsY)
+{   
+  for (int i=-1; i<2; ++i)
   {
     for (int j=-1; j<2; ++j)
     {
@@ -88,7 +81,7 @@ void GraphHelper_AddAllNeighboursToGridNode(graph_type& graph, int index, int de
         }
       }
     }
-  }*/
+  }
 }
 
 
@@ -103,8 +96,7 @@ void GraphHelper_CreateGrid(graph_type& graph,
                              int cySize,
                              int cxSize,
                              int NumCellsY,
-                             int NumCellsX,
-							 bool isRandom)
+                             int NumCellsX)
 { 
   //need some temporaries to help calculate each node center
   double CellWidth  = (double)cySize / (double)NumCellsX;
@@ -113,128 +105,28 @@ void GraphHelper_CreateGrid(graph_type& graph,
   double midX = CellWidth/2;
   double midY = CellHeight/2;
 
-  int randomX = 0;
-  int randomY = 0;
-  double randomCost = 0;
-  int randomLink = 0;
   
   //first create all the nodes
-  /*for (int row=0; row<NumCellsY; ++row)
+  for (int row=0; row<NumCellsY; ++row)
   {
     for (int col=0; col<NumCellsX; ++col)
     {
       graph.AddNode(NavGraphNode<>(graph.GetNextFreeNodeIndex(),
                                    Vector2D(midX + (col*CellWidth),
                                    midY + (row*CellHeight))));
+
     }
-  }*/
-
-  //Création du graphe de l'énoncé du TP3
-  if(isRandom == false)
-  {
-	  graph.AddNode(NavGraphNode<>(graph.GetNextFreeNodeIndex(), Vector2D(8*CellWidth, 8*CellHeight)));
-	  graph.AddNode(NavGraphNode<>(graph.GetNextFreeNodeIndex(), Vector2D(9*CellWidth, 5*CellHeight)));
-	  graph.AddNode(NavGraphNode<>(graph.GetNextFreeNodeIndex(), Vector2D(7*CellWidth, 11*CellHeight)));
-	  graph.AddNode(NavGraphNode<>(graph.GetNextFreeNodeIndex(), Vector2D(11*CellWidth, 10*CellHeight)));
-	  graph.AddNode(NavGraphNode<>(graph.GetNextFreeNodeIndex(), Vector2D(8*CellWidth, 17*CellHeight)));
-	  graph.AddNode(NavGraphNode<>(graph.GetNextFreeNodeIndex(), Vector2D(5*CellWidth, 9*CellHeight)));
-	  graph.AddNode(NavGraphNode<>(graph.GetNextFreeNodeIndex(), Vector2D(9*CellWidth, 14*CellHeight)));
-
-	  GraphHelper_AddAllNeighboursToGridNode(graph, 0, 1, 1.2);
-	  GraphHelper_AddAllNeighboursToGridNode(graph, 0, 5, 2.7);
-	  GraphHelper_AddAllNeighboursToGridNode(graph, 0, 6, 5.0);
-
-	  GraphHelper_AddAllNeighboursToGridNode(graph, 1, 0, 1.2);
-	  GraphHelper_AddAllNeighboursToGridNode(graph, 1, 6, 6.0);
-
-	  GraphHelper_AddAllNeighboursToGridNode(graph, 2, 3, 3.0);
-	  GraphHelper_AddAllNeighboursToGridNode(graph, 2, 4, 2.5);
-
-	  GraphHelper_AddAllNeighboursToGridNode(graph, 3, 2, 3.0);
-	  GraphHelper_AddAllNeighboursToGridNode(graph, 3, 5, 5.1);
-
-	  GraphHelper_AddAllNeighboursToGridNode(graph, 4, 6, 1.9);
-	  GraphHelper_AddAllNeighboursToGridNode(graph, 4, 2, 2.5);
-
-	  GraphHelper_AddAllNeighboursToGridNode(graph, 5, 0, 2.7);
-	  GraphHelper_AddAllNeighboursToGridNode(graph, 5, 3, 5.1);
-
-	  GraphHelper_AddAllNeighboursToGridNode(graph, 6, 4, 1.9);
-	  GraphHelper_AddAllNeighboursToGridNode(graph, 6, 0, 5.0);
   }
-  else
-  {
-	  //Si l'utilisateur a cliquer sur Generate New Graph, le graphe va être généré aléatoirement
-	  randomX = rand() % 5 + 3;
-	  graph.AddNode(NavGraphNode<>(graph.GetNextFreeNodeIndex(), Vector2D(randomX*CellWidth, 8*CellHeight)));
-	  randomX = rand() % 7 + 5;
-	  graph.AddNode(NavGraphNode<>(graph.GetNextFreeNodeIndex(), Vector2D(randomX*CellWidth, 5*CellHeight)));
-	  randomX = rand() % 3 + 1;
-	  graph.AddNode(NavGraphNode<>(graph.GetNextFreeNodeIndex(), Vector2D(randomX*CellWidth, 11*CellHeight)));
-	  randomX = rand() % 9 + 7;
-	  graph.AddNode(NavGraphNode<>(graph.GetNextFreeNodeIndex(), Vector2D(randomX*CellWidth, 10*CellHeight)));
-	  randomX = rand() % 5 + 3;
-	  graph.AddNode(NavGraphNode<>(graph.GetNextFreeNodeIndex(), Vector2D(randomX*CellWidth, 17*CellHeight)));
-	  randomX = rand() % 3 + 1;
-	  graph.AddNode(NavGraphNode<>(graph.GetNextFreeNodeIndex(), Vector2D(randomX*CellWidth, 9*CellHeight)));
-	  randomX = rand() % 7 + 5;
-	  graph.AddNode(NavGraphNode<>(graph.GetNextFreeNodeIndex(), Vector2D(randomX*CellWidth, 14*CellHeight)));
-  
-	  randomCost = functionRandD(1, 6);
-	  randomLink = rand() % 6;
-	  GraphHelper_AddAllNeighboursToGridNode(graph, 0, randomLink, randomCost);
-	  randomCost = functionRandD(1, 6);
-	  GraphHelper_AddAllNeighboursToGridNode(graph, 0, 5, randomCost);
-	  randomCost = functionRandD(1, 6);
-	  GraphHelper_AddAllNeighboursToGridNode(graph, 0, 6, randomCost);
-
-	  randomCost = functionRandD(1, 6);
-	  randomLink = rand() % 6;
-	  GraphHelper_AddAllNeighboursToGridNode(graph, 1, randomLink, randomCost);
-	  randomCost = functionRandD(1, 6);
-	  GraphHelper_AddAllNeighboursToGridNode(graph, 1, 6, randomCost);
-
-	  randomCost = functionRandD(1, 6);
-	  randomLink = rand() % 6;
-	  GraphHelper_AddAllNeighboursToGridNode(graph, 2, randomLink, randomCost);
-	  randomCost = functionRandD(1, 6);
-	  GraphHelper_AddAllNeighboursToGridNode(graph, 2, 4, randomCost);
-
-	  randomCost = functionRandD(1, 6);
-	  randomLink = rand() % 6;
-	  GraphHelper_AddAllNeighboursToGridNode(graph, 3, randomLink, randomCost);
-	  randomCost = functionRandD(1, 6);
-	  GraphHelper_AddAllNeighboursToGridNode(graph, 3, 5, randomCost);
-
-	  randomCost = functionRandD(1, 6);
-	  randomLink = rand() % 6;
-	  GraphHelper_AddAllNeighboursToGridNode(graph, 4, randomLink, randomCost);
-	  randomCost = functionRandD(1, 6);
-	  GraphHelper_AddAllNeighboursToGridNode(graph, 4, 2, randomCost);
-
-	  randomCost = functionRandD(1, 6);
-	  randomLink = rand() % 6;
-	  GraphHelper_AddAllNeighboursToGridNode(graph, 5, randomLink, randomCost);
-	  randomCost = functionRandD(1, 6);
-	  GraphHelper_AddAllNeighboursToGridNode(graph, 5, 3, randomCost);
-
-	  randomCost = functionRandD(1, 6);
-	  randomLink = rand() % 6;
-	  GraphHelper_AddAllNeighboursToGridNode(graph, 6, randomLink, randomCost);
-	  randomCost = functionRandD(1, 6);
-	  GraphHelper_AddAllNeighboursToGridNode(graph, 6, 0, randomCost);
-  }
-
   //now to calculate the edges. (A position in a 2d array [x][y] is the
   //same as [y*NumCellsX + x] in a 1d array). Each cell has up to eight
   //neighbours.
-  /*for (int row=0; row<NumCellsY; ++row)
+  for (int row=0; row<NumCellsY; ++row)
   {
     for (int col=0; col<NumCellsX; ++col)
     {
       GraphHelper_AddAllNeighboursToGridNode(graph, row, col, NumCellsX, NumCellsY);
     }
-  }*/
+  }
 }  
 
 
