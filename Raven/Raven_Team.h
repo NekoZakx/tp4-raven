@@ -22,6 +22,8 @@ class Raven_Team
 		bool IsInTeam(Raven_Bot*);
 
 		int GetTeamSize();
+
+		std::string GetName();
 };
 
 #endif
