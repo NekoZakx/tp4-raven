@@ -25,6 +25,7 @@
 #include "game/EntityFunctionTemplates.h"
 #include "Raven_Bot.h"
 #include "navigation/pathmanager.h"
+#include "Raven_Team.h"
 
 
 class BaseGameEntity;
@@ -37,6 +38,8 @@ class GraveMarkers;
 class Raven_Game
 {
 private:
+
+  std::vector<Raven_Team> ravenTeam;
 
   //the current game map
   Raven_Map*                       m_pMap;
