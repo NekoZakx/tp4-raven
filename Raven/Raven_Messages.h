@@ -15,6 +15,7 @@ enum message_type
   Msg_Blank,
   Msg_PathReady,
   Msg_NoPathAvailable,
+  Msg_isInDanger,
   Msg_TakeThatMF, 
   Msg_YouGotMeYouSOB,
   Msg_GoalQueueEmpty,
@@ -59,6 +60,10 @@ inline std::string MessageToString(int msg)
   case Msg_UserHasRemovedBot:
 
     return "Msg_UserHasRemovedBot";
+
+  case Msg_isInDanger:
+
+    return "Msg_isInDanger";
 
   default:
 

@@ -18,6 +18,7 @@
 
 #include "goals/Raven_Goal_Types.h"
 #include "goals/Goal_Think.h"
+#include "goals/Goal_DodgeSideToSide.h"
 
 
 #include "Debug/DebugConsole.h"
@@ -341,6 +342,12 @@ void Raven_Bot::ReduceHealth(unsigned int val)
   m_bHit = true;
 
   m_iNumUpdatesHitPersistant = (int)(FrameRate * script->GetDouble("HitFlashTime"));
+
+  Dispatcher->DispatchMsg(	SEND_MSG_IMMEDIATELY,
+							ID(),
+							ID(),
+							Msg_isInDanger,
+							NO_ADDITIONAL_INFO);
 }
 
 //--------------------------- Possess -----------------------------------------
