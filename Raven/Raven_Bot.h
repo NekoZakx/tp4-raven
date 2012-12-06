@@ -29,7 +29,7 @@ class Raven_Bot;
 class Goal_Think;
 class Raven_WeaponSystem;
 class Raven_SensoryMemory;
-
+class Raven_Team;
 
 
 
