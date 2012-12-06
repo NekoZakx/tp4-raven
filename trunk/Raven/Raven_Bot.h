@@ -16,6 +16,7 @@
 #include "game/MovingEntity.h"
 #include "misc/utils.h"
 #include "Raven_TargetingSystem.h"
+#include "Raven_Team.h"
 
 
 class Raven_PathPlanner;
@@ -39,6 +40,9 @@ private:
   enum Status{alive, dead, spawning};
 
 private:
+
+  //My current team, don't shoot them.
+  Raven_Team						 team;
 
   //alive, dead or spawning?
   Status                             m_Status;
@@ -160,6 +164,10 @@ public:
   void          SetSpawning(){m_Status = spawning;}
   void          SetDead(){m_Status = dead;}
   void          SetAlive(){m_Status = alive;}
+
+  //Get Set Team
+  void			SetTeam(Raven_Team newTeam){ team = newTeam; }
+  Raven_Team	GetTeam(){ return team; }
 
   //returns a value indicating the time in seconds it will take the bot
   //to reach the given position at its current speed.
