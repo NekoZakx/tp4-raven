@@ -7,6 +7,7 @@
 #include "..\Raven_Messages.h"
 
 #include "Goal_Wander.h"
+#include "Goal_DodgeSideToSide.h"
 #include "Goal_FollowPath.h"
 
 
@@ -61,9 +62,7 @@ int Goal_GetItem::Process()
   if (hasItemBeenStolen())
   {
     Terminate();
-  }
-
-  else
+  }else 
   {
     //process the subgoals
     m_iStatus = ProcessSubgoals();
@@ -81,6 +80,7 @@ bool Goal_GetItem::HandleMessage(const Telegram& msg)
   //if the msg was not handled, test to see if this goal can handle it
   if (bHandled == false)
   {
+	Vector2D dummy;//if the bot has space to strafe then do so
     switch(msg.Msg)
     {
     case Msg_PathReady:
@@ -102,6 +102,15 @@ bool Goal_GetItem::HandleMessage(const Telegram& msg)
       m_iStatus = failed;
 
       return true; //msg handled
+
+	case Msg_isInDanger:
+		
+		if (m_pOwner->canStepLeft(dummy) || m_pOwner->canStepRight(dummy))
+		{
+			RemoveAllSubgoals();
+			AddSubgoal(new Goal_DodgeSideToSide(m_pOwner));
+		}
+		return true;
 
     default: return false;
     }
