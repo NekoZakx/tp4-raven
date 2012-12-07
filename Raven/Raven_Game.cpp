@@ -217,7 +217,11 @@ bool Raven_Game::AttemptToAddBot(Raven_Bot* pBot)
   while (--attempts >= 0)
   { 
     //select a random spawn point
-	  Vector2D pos = m_pMap->GetRandomSpawnPoint();
+	  Vector2D pos;
+	  if(pBot->GetTeam()->GetName() == "Red")
+		pos = m_pMap->GetSpawnPoints()[0];
+	  else
+		pos = m_pMap->GetSpawnPoints()[1];
 
     //check to see if it's occupied
     std::list<Raven_Bot*>::const_iterator curBot = m_Bots.begin();
