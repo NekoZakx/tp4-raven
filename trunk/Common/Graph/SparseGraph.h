@@ -466,10 +466,10 @@ template <class node_type, class edge_type>
 node_type&  SparseGraph<node_type, edge_type>::GetNodeByPosition(double x, double y)
 {
 	for(int i = 0; i < m_Nodes.size(); i++){
-		if(	x / m_Nodes[i].Pos().x < 1.1 &&
-			x / m_Nodes[i].Pos().x > 0.9 &&
-			y / m_Nodes[i].Pos().y < 1.1 &&
-			y / m_Nodes[i].Pos().y > 0.9)
+		if(	x / m_Nodes[i].Pos().x < 1.5 &&
+			x / m_Nodes[i].Pos().x > 0.5 &&
+			y / m_Nodes[i].Pos().y < 1.5 &&
+			y / m_Nodes[i].Pos().y > 0.5)
 				return m_Nodes[i];
 	} 
     return m_Nodes[0];
