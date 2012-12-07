@@ -76,6 +76,7 @@ Trigger_WeaponGiver::Trigger_WeaponGiver(int type, double x, double y, double r,
   //create this trigger's region of fluence
   AddCircularTriggerRegion(Pos(), script->GetDouble("DefaultGiverTriggerRange"));
 
+  SetRespawnDelay((unsigned int)(script->GetDouble("Weapon_RespawnDelay") * FrameRate * 10000));
 
   //create the vertex buffer for the rocket shape
   const int NumRocketVerts = 8;
