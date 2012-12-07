@@ -65,6 +65,35 @@ void Trigger_WeaponGiver::Read(std::ifstream& in)
   SetRespawnDelay((unsigned int)(script->GetDouble("Weapon_RespawnDelay") * FrameRate));
 }
 
+Trigger_WeaponGiver::Trigger_WeaponGiver(int type, double x, double y, double r, int index):
+      
+          Trigger_Respawning<Raven_Bot>(type)
+{
+  SetPos(Vector2D(x,y)); 
+  SetBRadius(r);
+  SetGraphNodeIndex(index);
+
+  //create this trigger's region of fluence
+  AddCircularTriggerRegion(Pos(), script->GetDouble("DefaultGiverTriggerRange"));
+
+
+  //create the vertex buffer for the rocket shape
+  const int NumRocketVerts = 8;
+  const Vector2D rip[NumRocketVerts] = {Vector2D(0, 3),
+                                       Vector2D(1, 2),
+                                       Vector2D(1, 0),
+                                       Vector2D(2, -2),
+                                       Vector2D(-2, -2),
+                                       Vector2D(-1, 0),
+                                       Vector2D(-1, 2),
+                                       Vector2D(0, 3)};
+  
+  for (int i=0; i<NumRocketVerts; ++i)
+  {
+    m_vecRLVB.push_back(rip[i]);
+  }
+}
+
 
 
 void Trigger_WeaponGiver::Render()

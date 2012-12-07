@@ -1,8 +1,9 @@
 #include "./Raven_Team.h"
 
 //Create a Team instance with the name
-Raven_Team::Raven_Team( std::string name ) {
+Raven_Team::Raven_Team( std::string name, int ID ) {
 	team_name = name;
+	this->ID = ID;
 }
 
 //Destroy the team
@@ -46,4 +47,9 @@ int Raven_Team::GetTeamSize(){
 //Get the name of the team
 std::string Raven_Team::GetName(){
 	return team_name;
+}
+
+//Get the name of the team
+int Raven_Team::GetID(){
+	return ID;
 }

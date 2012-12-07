@@ -163,6 +163,26 @@ void Raven_Map::AddWeapon_Giver(int type_of_weapon, std::ifstream& in)
   EntityMgr->RegisterEntity(wg);
 }
 
+//----------------------- AddTempWeapon__Giver ----------------------------------
+//-----------------------------------------------------------------------------
+void Raven_Map::AddTempWeapon_Giver(int type, int ID, double x, double y, double r, int index)
+{
+  Trigger_WeaponGiver* wg = new Trigger_WeaponGiver(ID,x,y,r,index);
+
+  wg->SetEntityType(type);
+
+  //add it to the appropriate vectors
+  m_TriggerSystem.Register(wg);
+
+  //let the corresponding navgraph node point to this object
+  NavGraph::NodeType& node = m_pNavGraph->GetNode(wg->GraphNodeIndex());
+
+  node.SetExtraInfo(wg);
+
+  //register the entity 
+  EntityMgr->RegisterEntity(wg);
+}
+
 
 //------------------------- LoadMap ------------------------------------
 //

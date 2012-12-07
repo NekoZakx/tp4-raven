@@ -235,6 +235,27 @@ bool Raven_Bot::HandleMessage(const Telegram& msg)
     //if this bot is now dead let the shooter know
     if (isDead())
     {
+	  //Get weapon and put it to the spawn of the team, If null their is no gun
+		if(this->GetWeaponSys()->GetWeaponFromInventory(type_rail_gun) != NULL){
+			//Add weapon near spawn point
+			double x = this->m_pWorld->GetMap()->GetSpawnPoints()[team->GetID()].x + 20;
+			double y = this->m_pWorld->GetMap()->GetSpawnPoints()[team->GetID()].y;
+			this->m_pWorld->GetMap()->AddTempWeapon_Giver(type_rail_gun,this->GetNextValidID(), x,y , 7, this->m_pWorld->GetMap()->GetNavGraph().GetNodeByPosition(x,y).Index());
+		}
+		if(this->GetWeaponSys()->GetWeaponFromInventory(type_shotgun) != NULL){
+			//Add weapon near spawn point
+			double x = this->m_pWorld->GetMap()->GetSpawnPoints()[team->GetID()].x - 20;
+			double y = this->m_pWorld->GetMap()->GetSpawnPoints()[team->GetID()].y;
+			this->m_pWorld->GetMap()->AddTempWeapon_Giver(type_shotgun,this->GetNextValidID(), x,y , 7, this->m_pWorld->GetMap()->GetNavGraph().GetNodeByPosition(x,y).Index());
+		}
+		if(this->GetWeaponSys()->GetWeaponFromInventory(type_rocket_launcher) != NULL) {
+			//Add weapon near spawn point
+			double x = this->m_pWorld->GetMap()->GetSpawnPoints()[team->GetID()].x;
+			double y = this->m_pWorld->GetMap()->GetSpawnPoints()[team->GetID()].y + 20;
+			this->m_pWorld->GetMap()->AddTempWeapon_Giver(type_rocket_launcher,this->GetNextValidID(), x,y , 7, this->m_pWorld->GetMap()->GetNavGraph().GetNodeByPosition(x,y).Index());
+		}
+
+
       Dispatcher->DispatchMsg(SEND_MSG_IMMEDIATELY,
                               ID(),
                               msg.Sender,
