@@ -9,10 +9,11 @@ class Raven_Team
 {
 	private:
 		std::string team_name;
+		int ID;
 		std::vector<Raven_Bot*> teamMember;
 
 	public:
-		Raven_Team(std::string name);
+		Raven_Team(std::string name, int ID);
 		~Raven_Team();
 
 		void AddBot(Raven_Bot*);
@@ -22,7 +23,7 @@ class Raven_Team
 		bool IsInTeam(Raven_Bot*);
 
 		int GetTeamSize();
-
+		int GetID();
 		std::string GetName();
 };
 

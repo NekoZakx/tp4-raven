@@ -40,8 +40,8 @@ Raven_Game::Raven_Game():m_pSelectedBot(NULL),
                          m_pPathManager(NULL),
                          m_pGraveMarkers(NULL)
 {
-	ravenTeam.push_back(Raven_Team("Blue"));
-	ravenTeam.push_back(Raven_Team("Red"));
+	ravenTeam.push_back(Raven_Team("Blue",0));
+	ravenTeam.push_back(Raven_Team("Red",1));
   //load in the default map
   LoadMap(script->GetString("StartMap"));
 }
@@ -218,10 +218,12 @@ bool Raven_Game::AttemptToAddBot(Raven_Bot* pBot)
   { 
     //select a random spawn point
 	  Vector2D pos;
-	  if(pBot->GetTeam()->GetName() == "Red")
-		pos = m_pMap->GetSpawnPoints()[0];
-	  else
-		pos = m_pMap->GetSpawnPoints()[1];
+	  for( int i = 0; i < ravenTeam.size(); i++) {
+		  if(ravenTeam[i].GetName() == pBot->GetTeam()->GetName()){
+			  pos = m_pMap->GetSpawnPoints()[i];
+		  }
+	  }
+		
 
     //check to see if it's occupied
     std::list<Raven_Bot*>::const_iterator curBot = m_Bots.begin();

@@ -108,7 +108,7 @@ public:
   //returns the position of a graph node selected at random
   Vector2D GetRandomNodeLocation()const;
   
-  
+  void AddTempWeapon_Giver(int type, int ID, double x, double y, double r, int index);
   void  UpdateTriggerSystem(std::list<Raven_Bot*>& bots);
 
   const Raven_Map::TriggerSystem::TriggerList&  GetTriggers()const{return m_TriggerSystem.GetTriggers();}
