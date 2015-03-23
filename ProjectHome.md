@@ -1,0 +1,1 @@
+Is simply create an AI for one of our course at UQAC
